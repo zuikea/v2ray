@@ -177,7 +177,7 @@ updateProject() {
     RC_FILE=`cat $RC_SERVICE|grep ExecStart|awk '{print $1}'|cut -d = -f2`
 
     if [[ ! -e $RC_FILE || -z `cat $RC_FILE|grep iptables` ]];then
-        LOCAL_IP=`curl -s6m8 https://ip.gs`
+        LOCAL_IP=`curl -s6m8 https://ip.gs 2>/dev/null`
         [[ `echo $LOCAL_IP|grep :` ]] && IPTABLE_WAY="ip6tables" || IPTABLE_WAY="iptables" 
         if [[ ! -e $RC_FILE || -z `cat $RC_FILE|grep "/bin/bash"` ]];then
             echo "#!/bin/bash" >> $RC_FILE
@@ -232,19 +232,19 @@ EOF
 
 #时间同步
 timeSync() {
-    if [[ ${INSTALL_WAY} == 0 ]];then
-        echo -e "${Info} Time Synchronizing.. ${Font}"
-        if [[ `command -v ntpdate` ]];then
-            ntpdate pool.ntp.org
-        elif [[ `command -v chronyc` ]];then
-            chronyc -a makestep
-        fi
+#     if [[ ${INSTALL_WAY} == 0 ]];then
+#         echo -e "${Info} Time Synchronizing.. ${Font}"
+#         if [[ `command -v ntpdate` ]];then
+#             ntpdate pool.ntp.org
+#         elif [[ `command -v chronyc` ]];then
+#             chronyc -a makestep
+#         fi
 
-        if [[ $? -eq 0 ]];then 
-            echo -e "${OK} Time Sync Success ${Font}"
-            echo -e "${OK} now: `date -R`${Font}"
-        fi
-    fi
+#         if [[ $? -eq 0 ]];then 
+#             echo -e "${OK} Time Sync Success ${Font}"
+#             echo -e "${OK} now: `date -R`${Font}"
+#         fi
+#     fi
 }
 
 profileInit() {
